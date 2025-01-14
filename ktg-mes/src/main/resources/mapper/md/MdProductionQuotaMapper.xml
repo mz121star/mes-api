@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ktg.mes.md.mapper.MdProductionQuotaMapper">
+
+    <resultMap type="MdProductionQuota" id="MdProductionQuotaResult">
+        <result property="quotaId"    column="quota_id"    />
+        <result property="quotaName"    column="quota_name"    />
+        <result property="quotaNumber"    column="quota_number"    />
+        <result property="orderNumber"    column="order_number"    />
+        <result property="projectName"    column="project_name"    />
+        <result property="projectCode"    column="project_code"    />
+        <result property="projectNumber"    column="project_number"    />
+        <result property="currentVersionFreezeDate"    column="current_version_freeze_date"    />
+        <result property="drawingReceiptDate"    column="drawing_receipt_date"    />
+        <result property="fileNumber"    column="file_number"    />
+        <result property="quotaPreparer"    column="quota_preparer"    />
+        <result property="preparationDate"    column="preparation_date"    />
+        <result property="lastModification"    column="last_modification"    />
+    </resultMap>
+
+    <resultMap id="MdProductionQuotaMdProductionQuotaMaterialsResult" type="MdProductionQuota" extends="MdProductionQuotaResult">
+        <collection property="mdProductionQuotaMaterialsList" notNullColumn="sub_material_id" javaType="java.util.List" resultMap="MdProductionQuotaMaterialsResult" />
+    </resultMap>
+
+    <resultMap id="MdProductionQuotaMdProductionQuotaFilesResult" type="MdProductionQuota" extends="MdProductionQuotaResult">
+        <collection property="mdProductionQuotaFilesList" notNullColumn="sub_file_id" javaType="java.util.List" resultMap="MdProductionQuotaFilesResult" />
+    </resultMap>
+
+    <resultMap type="MdProductionQuotaFiles" id="MdProductionQuotaFilesResult">
+        <result property="fileId"    column="sub_file_id"    />
+        <result property="quotaId"    column="sub_quota_id"    />
+        <result property="filePath"    column="sub_file_path"    />
+        <result property="uploadDate"    column="sub_upload_date"    />
+        <result property="versionNumber"    column="sub_version_number"    />
+    </resultMap>
+
+    <resultMap type="MdProductionQuotaMaterials" id="MdProductionQuotaMaterialsResult">
+        <result property="quotaId"    column="sub_quota_id"    />
+        <result property="version"    column="sub_version"    />
+        <result property="materialId"    column="sub_material_id"    />
+        <result property="materialType"    column="sub_material_type"    />
+        <result property="drawingNumber1"    column="sub_drawing_number1"    />
+        <result property="drawingNumber2"    column="sub_drawing_number2"    />
+        <result property="materialUniqueName"    column="sub_material_unique_name"    />
+        <result property="materialName"    column="sub_material_name"    />
+        <result property="specificationFeatures"    column="sub_specification_features"    />
+        <result property="singleQuantity"    column="sub_single_quantity"    />
+        <result property="unit"    column="sub_unit"    />
+        <result property="singleWeight"    column="sub_single_weight"    />
+        <result property="material"    column="sub_material"    />
+        <result property="featureOrderMaterialSize"    column="sub_feature_order_material_size"    />
+        <result property="featureOrderQuantity"    column="sub_feature_order_quantity"    />
+        <result property="featureUnit"    column="sub_feature_unit"    />
+        <result property="featureSingleCut"    column="sub_feature_single_cut"    />
+        <result property="featureOrderMeter"    column="sub_feature_order_meter"    />
+        <result property="featureCutMeter"    column="sub_feature_cut_meter"    />
+        <result property="featureSingleQuantity"    column="sub_feature_single_quantity"    />
+        <result property="surfaceTreatmentRequirement"    column="sub_surface_treatment_requirement"    />
+        <result property="remark"    column="sub_remark"    />
+        <result property="quotaVersion"    column="sub_quota_version"    />
+        <result property="drawingVersion"    column="sub_drawing_version"    />
+    </resultMap>
+
+    <sql id="selectMdProductionQuotaVo">
+        select quota_id, quota_name, quota_number, order_number, project_name, project_code, project_number, current_version_freeze_date, drawing_receipt_date, file_number, quota_preparer, preparation_date, last_modification from md_production_quota
+    </sql>
+
+    <select id="selectMdProductionQuotaList" parameterType="MdProductionQuota" resultMap="MdProductionQuotaResult">
+        <include refid="selectMdProductionQuotaVo"/>
+        <where>
+            <if test="quotaName != null  and quotaName != ''"> and quota_name like concat('%', #{quotaName}, '%')</if>
+            <if test="quotaNumber != null  and quotaNumber != ''"> and quota_number like concat('%', #{quotaNumber}, '%')</if>
+            <if test="orderNumber != null  and orderNumber != ''"> and order_number like concat('%', #{orderNumber}, '%')</if>
+            <if test="projectName != null  and projectName != ''"> and project_name like concat('%', #{projectName}, '%')</if>
+            <if test="projectCode != null  and projectCode != ''"> and project_code like concat('%', #{projectCode}, '%')</if>
+            <if test="projectNumber != null  and projectNumber != ''"> and project_number like concat('%', #{projectNumber}, '%')</if>
+            <if test="currentVersionFreezeDate != null "> and current_version_freeze_date = #{currentVersionFreezeDate}</if>
+            <if test="drawingReceiptDate != null "> and drawing_receipt_date = #{drawingReceiptDate}</if>
+            <if test="fileNumber != null  and fileNumber != ''"> and file_number = #{fileNumber}</if>
+            <if test="quotaPreparer != null  and quotaPreparer != ''"> and quota_preparer = #{quotaPreparer}</if>
+            <if test="preparationDate != null "> and preparation_date = #{preparationDate}</if>
+            <if test="lastModification != null "> and last_modification = #{lastModification}</if>
+        </where>
+    </select>
+
+    <select id="selectMdProductionQuotaByQuotaId" parameterType="Long" resultMap="MdProductionQuotaResult">
+        select a.quota_id, a.quota_name, a.quota_number, a.order_number, a.project_name, a.project_code, a.project_number, a.current_version_freeze_date, a.drawing_receipt_date, a.file_number, a.quota_preparer, a.preparation_date, a.last_modification
+        from md_production_quota a
+         where a.quota_id = #{quotaId}
+    </select>
+
+    <insert id="insertMdProductionQuota" parameterType="MdProductionQuota">
+        insert into md_production_quota
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="quotaId != null">quota_id,</if>
+            <if test="quotaName != null and quotaName != ''">quota_name,</if>
+            <if test="quotaNumber != null and quotaNumber != ''">quota_number,</if>
+            <if test="orderNumber != null">order_number,</if>
+            <if test="projectName != null">project_name,</if>
+            <if test="projectCode != null">project_code,</if>
+            <if test="projectNumber != null">project_number,</if>
+            <if test="currentVersionFreezeDate != null">current_version_freeze_date,</if>
+            <if test="drawingReceiptDate != null">drawing_receipt_date,</if>
+            <if test="fileNumber != null">file_number,</if>
+            <if test="quotaPreparer != null">quota_preparer,</if>
+            <if test="preparationDate != null">preparation_date,</if>
+            <if test="lastModification != null">last_modification,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="quotaId != null">#{quotaId},</if>
+            <if test="quotaName != null and quotaName != ''">#{quotaName},</if>
+            <if test="quotaNumber != null and quotaNumber != ''">#{quotaNumber},</if>
+            <if test="orderNumber != null">#{orderNumber},</if>
+            <if test="projectName != null">#{projectName},</if>
+            <if test="projectCode != null">#{projectCode},</if>
+            <if test="projectNumber != null">#{projectNumber},</if>
+            <if test="currentVersionFreezeDate != null">#{currentVersionFreezeDate},</if>
+            <if test="drawingReceiptDate != null">#{drawingReceiptDate},</if>
+            <if test="fileNumber != null">#{fileNumber},</if>
+            <if test="quotaPreparer != null">#{quotaPreparer},</if>
+            <if test="preparationDate != null">#{preparationDate},</if>
+            <if test="lastModification != null">#{lastModification},</if>
+        </trim>
+    </insert>
+
+    <update id="updateMdProductionQuota" parameterType="MdProductionQuota">
+        update md_production_quota
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="quotaName != null and quotaName != ''">quota_name = #{quotaName},</if>
+            <if test="quotaNumber != null and quotaNumber != ''">quota_number = #{quotaNumber},</if>
+            <if test="orderNumber != null">order_number = #{orderNumber},</if>
+            <if test="projectName != null">project_name = #{projectName},</if>
+            <if test="projectCode != null">project_code = #{projectCode},</if>
+            <if test="projectNumber != null">project_number = #{projectNumber},</if>
+            <if test="currentVersionFreezeDate != null">current_version_freeze_date = #{currentVersionFreezeDate},</if>
+            <if test="drawingReceiptDate != null">drawing_receipt_date = #{drawingReceiptDate},</if>
+            <if test="fileNumber != null">file_number = #{fileNumber},</if>
+            <if test="quotaPreparer != null">quota_preparer = #{quotaPreparer},</if>
+            <if test="preparationDate != null">preparation_date = #{preparationDate},</if>
+            <if test="lastModification != null">last_modification = #{lastModification},</if>
+        </trim>
+        where quota_id = #{quotaId}
+    </update>
+
+    <delete id="deleteMdProductionQuotaByQuotaId" parameterType="Long">
+        delete from md_production_quota where quota_id = #{quotaId}
+    </delete>
+
+    <delete id="deleteMdProductionQuotaByQuotaIds" parameterType="String">
+        delete from md_production_quota where quota_id in
+        <foreach item="quotaId" collection="array" open="(" separator="," close=")">
+            #{quotaId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteMdProductionQuotaMaterialsByQuotaIds" parameterType="String">
+        delete from md_production_quota_materials where quota_id in
+        <foreach item="quotaId" collection="array" open="(" separator="," close=")">
+            #{quotaId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteMdProductionQuotaMaterialsByQuotaId" parameterType="Long">
+        delete from md_production_quota_materials where quota_id = #{quotaId}
+    </delete>
+
+    <insert id="batchMdProductionQuotaMaterials">
+        insert into md_production_quota_materials( quota_id, version, material_id, material_type, drawing_number1, drawing_number2, material_unique_name, material_name, specification_features, single_quantity, unit, single_weight, material, feature_order_material_size, feature_order_quantity, feature_unit, feature_single_cut, feature_order_meter, feature_cut_meter, feature_single_quantity, surface_treatment_requirement, remark, quota_version, drawing_version) values
+        <foreach item="item" index="index" collection="list" separator=",">
+            ( #{item.quotaId}, #{item.version}, #{item.materialId}, #{item.materialType}, #{item.drawingNumber1}, #{item.drawingNumber2}, #{item.materialUniqueName}, #{item.materialName}, #{item.specificationFeatures}, #{item.singleQuantity}, #{item.unit}, #{item.singleWeight}, #{item.material}, #{item.featureOrderMaterialSize}, #{item.featureOrderQuantity}, #{item.featureUnit}, #{item.featureSingleCut}, #{item.featureOrderMeter}, #{item.featureCutMeter}, #{item.featureSingleQuantity}, #{item.surfaceTreatmentRequirement}, #{item.remark}, #{item.quotaVersion}, #{item.drawingVersion})
+        </foreach>
+    </insert>
+
+    <delete id="deleteMdProductionQuotaFilesByQuotaIds" parameterType="String">
+        delete from md_production_quota_files where quota_id in
+        <foreach item="quotaId" collection="array" open="(" separator="," close=")">
+            #{quotaId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteMdProductionQuotaFilesByQuotaId" parameterType="Long">
+        delete from md_production_quota_files where quota_id = #{quotaId}
+    </delete>
+
+    <insert id="batchMdProductionQuotaFiles">
+        insert into md_production_quota_files( file_id, quota_id, file_path, upload_date, version_number) values
+        <foreach item="item" index="index" collection="list" separator=",">
+            ( #{item.fileId}, #{item.quotaId}, #{item.filePath}, #{item.uploadDate}, #{item.versionNumber})
+        </foreach>
+    </insert>
+</mapper>

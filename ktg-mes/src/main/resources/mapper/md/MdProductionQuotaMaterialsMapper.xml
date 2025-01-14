@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ktg.mes.md.mapper.MdProductionQuotaMaterialsMapper">
+    
+    <resultMap type="MdProductionQuotaMaterials" id="MdProductionQuotaMaterialsResult">
+        <result property="quotaId"    column="quota_id"    />
+        <result property="version"    column="version"    />
+        <result property="materialId"    column="material_id"    />
+        <result property="materialType"    column="material_type"    />
+        <result property="drawingNumber1"    column="drawing_number1"    />
+        <result property="drawingNumber2"    column="drawing_number2"    />
+        <result property="materialUniqueName"    column="material_unique_name"    />
+        <result property="materialName"    column="material_name"    />
+        <result property="specificationFeatures"    column="specification_features"    />
+        <result property="singleQuantity"    column="single_quantity"    />
+        <result property="unit"    column="unit"    />
+        <result property="singleWeight"    column="single_weight"    />
+        <result property="material"    column="material"    />
+        <result property="featureOrderMaterialSize"    column="feature_order_material_size"    />
+        <result property="featureOrderQuantity"    column="feature_order_quantity"    />
+        <result property="featureUnit"    column="feature_unit"    />
+        <result property="featureSingleCut"    column="feature_single_cut"    />
+        <result property="featureOrderMeter"    column="feature_order_meter"    />
+        <result property="featureCutMeter"    column="feature_cut_meter"    />
+        <result property="featureSingleQuantity"    column="feature_single_quantity"    />
+        <result property="surfaceTreatmentRequirement"    column="surface_treatment_requirement"    />
+        <result property="remark"    column="remark"    />
+        <result property="quotaVersion"    column="quota_version"    />
+        <result property="drawingVersion"    column="drawing_version"    />
+    </resultMap>
+
+    <sql id="selectMdProductionQuotaMaterialsVo">
+        select quota_id, version, material_id, material_type, drawing_number1, drawing_number2, material_unique_name, material_name, specification_features, single_quantity, unit, single_weight, material, feature_order_material_size, feature_order_quantity, feature_unit, feature_single_cut, feature_order_meter, feature_cut_meter, feature_single_quantity, surface_treatment_requirement, remark, quota_version, drawing_version from md_production_quota_materials
+    </sql>
+
+    <select id="selectMdProductionQuotaMaterialsList" parameterType="MdProductionQuotaMaterials" resultMap="MdProductionQuotaMaterialsResult">
+        <include refid="selectMdProductionQuotaMaterialsVo"/>
+        <where>  
+            <if test="quotaId != null "> and quota_id = #{quotaId}</if>
+            <if test="version != null "> and version = #{version}</if>
+            <if test="materialType != null  and materialType != ''"> and material_type = #{materialType}</if>
+            <if test="drawingNumber1 != null  and drawingNumber1 != ''"> and drawing_number1 like concat('%', #{drawingNumber1}, '%')</if>
+            <if test="drawingNumber2 != null  and drawingNumber2 != ''"> and drawing_number2 like concat('%', #{drawingNumber2}, '%')</if>
+            <if test="materialUniqueName != null  and materialUniqueName != ''"> and material_unique_name like concat('%', #{materialUniqueName}, '%')</if>
+            <if test="materialName != null  and materialName != ''"> and material_name like concat('%', #{materialName}, '%')</if>
+            <if test="specificationFeatures != null  and specificationFeatures != ''"> and specification_features like concat('%', #{specificationFeatures}, '%')</if>
+            <if test="singleQuantity != null  and singleQuantity != ''"> and single_quantity = #{singleQuantity}</if>
+            <if test="unit != null  and unit != ''"> and unit = #{unit}</if>
+            <if test="singleWeight != null "> and single_weight = #{singleWeight}</if>
+            <if test="material != null  and material != ''"> and material like concat('%', #{material}, '%')</if>
+            <if test="featureOrderMaterialSize != null  and featureOrderMaterialSize != ''"> and feature_order_material_size like concat('%', #{featureOrderMaterialSize}, '%')</if>
+            <if test="featureOrderQuantity != null  and featureOrderQuantity != ''"> and feature_order_quantity like concat('%', #{featureOrderQuantity}, '%')</if>
+            <if test="featureUnit != null  and featureUnit != ''"> and feature_unit = #{featureUnit}</if>
+            <if test="featureSingleCut != null  and featureSingleCut != ''"> and feature_single_cut = #{featureSingleCut}</if>
+            <if test="featureOrderMeter != null "> and feature_order_meter = #{featureOrderMeter}</if>
+            <if test="featureCutMeter != null "> and feature_cut_meter = #{featureCutMeter}</if>
+            <if test="featureSingleQuantity != null  and featureSingleQuantity != ''"> and feature_single_quantity = #{featureSingleQuantity}</if>
+            <if test="surfaceTreatmentRequirement != null  and surfaceTreatmentRequirement != ''"> and surface_treatment_requirement like concat('%', #{surfaceTreatmentRequirement}, '%')</if>
+            <if test="quotaVersion != null  and quotaVersion != ''"> and quota_version = #{quotaVersion}</if>
+            <if test="drawingVersion != null  and drawingVersion != ''"> and drawing_version = #{drawingVersion}</if>
+        </where>
+    </select>
+    
+    <select id="selectMdProductionQuotaMaterialsByMaterialId" parameterType="Long" resultMap="MdProductionQuotaMaterialsResult">
+        <include refid="selectMdProductionQuotaMaterialsVo"/>
+        where material_id = #{materialId}
+    </select>
+        
+    <insert id="insertMdProductionQuotaMaterials" parameterType="MdProductionQuotaMaterials" useGeneratedKeys="true" keyProperty="materialId">
+        insert into md_production_quota_materials
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="quotaId != null">quota_id,</if>
+            <if test="version != null">version,</if>
+            <if test="materialType != null and materialType != ''">material_type,</if>
+            <if test="drawingNumber1 != null">drawing_number1,</if>
+            <if test="drawingNumber2 != null">drawing_number2,</if>
+            <if test="materialUniqueName != null">material_unique_name,</if>
+            <if test="materialName != null">material_name,</if>
+            <if test="specificationFeatures != null">specification_features,</if>
+            <if test="singleQuantity != null">single_quantity,</if>
+            <if test="unit != null">unit,</if>
+            <if test="singleWeight != null">single_weight,</if>
+            <if test="material != null">material,</if>
+            <if test="featureOrderMaterialSize != null">feature_order_material_size,</if>
+            <if test="featureOrderQuantity != null">feature_order_quantity,</if>
+            <if test="featureUnit != null">feature_unit,</if>
+            <if test="featureSingleCut != null">feature_single_cut,</if>
+            <if test="featureOrderMeter != null">feature_order_meter,</if>
+            <if test="featureCutMeter != null">feature_cut_meter,</if>
+            <if test="featureSingleQuantity != null">feature_single_quantity,</if>
+            <if test="surfaceTreatmentRequirement != null">surface_treatment_requirement,</if>
+            <if test="remark != null">remark,</if>
+            <if test="quotaVersion != null">quota_version,</if>
+            <if test="drawingVersion != null">drawing_version,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="quotaId != null">#{quotaId},</if>
+            <if test="version != null">#{version},</if>
+            <if test="materialType != null and materialType != ''">#{materialType},</if>
+            <if test="drawingNumber1 != null">#{drawingNumber1},</if>
+            <if test="drawingNumber2 != null">#{drawingNumber2},</if>
+            <if test="materialUniqueName != null">#{materialUniqueName},</if>
+            <if test="materialName != null">#{materialName},</if>
+            <if test="specificationFeatures != null">#{specificationFeatures},</if>
+            <if test="singleQuantity != null">#{singleQuantity},</if>
+            <if test="unit != null">#{unit},</if>
+            <if test="singleWeight != null">#{singleWeight},</if>
+            <if test="material != null">#{material},</if>
+            <if test="featureOrderMaterialSize != null">#{featureOrderMaterialSize},</if>
+            <if test="featureOrderQuantity != null">#{featureOrderQuantity},</if>
+            <if test="featureUnit != null">#{featureUnit},</if>
+            <if test="featureSingleCut != null">#{featureSingleCut},</if>
+            <if test="featureOrderMeter != null">#{featureOrderMeter},</if>
+            <if test="featureCutMeter != null">#{featureCutMeter},</if>
+            <if test="featureSingleQuantity != null">#{featureSingleQuantity},</if>
+            <if test="surfaceTreatmentRequirement != null">#{surfaceTreatmentRequirement},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="quotaVersion != null">#{quotaVersion},</if>
+            <if test="drawingVersion != null">#{drawingVersion},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMdProductionQuotaMaterials" parameterType="MdProductionQuotaMaterials">
+        update md_production_quota_materials
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="quotaId != null">quota_id = #{quotaId},</if>
+            <if test="version != null">version = #{version},</if>
+            <if test="materialType != null and materialType != ''">material_type = #{materialType},</if>
+            <if test="drawingNumber1 != null">drawing_number1 = #{drawingNumber1},</if>
+            <if test="drawingNumber2 != null">drawing_number2 = #{drawingNumber2},</if>
+            <if test="materialUniqueName != null">material_unique_name = #{materialUniqueName},</if>
+            <if test="materialName != null">material_name = #{materialName},</if>
+            <if test="specificationFeatures != null">specification_features = #{specificationFeatures},</if>
+            <if test="singleQuantity != null">single_quantity = #{singleQuantity},</if>
+            <if test="unit != null">unit = #{unit},</if>
+            <if test="singleWeight != null">single_weight = #{singleWeight},</if>
+            <if test="material != null">material = #{material},</if>
+            <if test="featureOrderMaterialSize != null">feature_order_material_size = #{featureOrderMaterialSize},</if>
+            <if test="featureOrderQuantity != null">feature_order_quantity = #{featureOrderQuantity},</if>
+            <if test="featureUnit != null">feature_unit = #{featureUnit},</if>
+            <if test="featureSingleCut != null">feature_single_cut = #{featureSingleCut},</if>
+            <if test="featureOrderMeter != null">feature_order_meter = #{featureOrderMeter},</if>
+            <if test="featureCutMeter != null">feature_cut_meter = #{featureCutMeter},</if>
+            <if test="featureSingleQuantity != null">feature_single_quantity = #{featureSingleQuantity},</if>
+            <if test="surfaceTreatmentRequirement != null">surface_treatment_requirement = #{surfaceTreatmentRequirement},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="quotaVersion != null">quota_version = #{quotaVersion},</if>
+            <if test="drawingVersion != null">drawing_version = #{drawingVersion},</if>
+        </trim>
+        where material_id = #{materialId}
+    </update>
+
+    <delete id="deleteMdProductionQuotaMaterialsByMaterialId" parameterType="Long">
+        delete from md_production_quota_materials where material_id = #{materialId}
+    </delete>
+
+    <delete id="deleteMdProductionQuotaMaterialsByMaterialIds" parameterType="String">
+        delete from md_production_quota_materials where material_id in 
+        <foreach item="materialId" collection="array" open="(" separator="," close=")">
+            #{materialId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteMdProductionQuotaMaterialsByFilesId" parameterType="Long">
+        delete from md_production_quota_materials where file_id = #{fileId}
+    </delete>
+
+</mapper>

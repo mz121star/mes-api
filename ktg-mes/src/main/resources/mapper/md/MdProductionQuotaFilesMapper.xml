@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ktg.mes.md.mapper.MdProductionQuotaFilesMapper">
+
+    <!-- 结果映射，保持不变，已包含isDelete字段的映射 -->
+    <resultMap type="MdProductionQuotaFiles" id="MdProductionQuotaFilesResult">
+        <result property="fileId"    column="file_id"    />
+        <result property="quotaId"    column="quota_id"    />
+        <result property="quotaName"    column="quota_name"    />
+        <result property="filePath"    column="file_path"    />
+        <result property="uploadDate"    column="upload_date"    />
+        <result property="versionNumber"    column="version_number"    />
+        <result property="description"    column="description"    />
+        <result property="ordernum"    column="orderNum"    />
+        <result property="isProcessed"    column="is_processed"    />
+        <result property="isActivated"    column="is_activated"    />
+        <result property="isDelete"    column="is_delete"    />
+        <result property="fileAdvSetting"    column="file_adv_setting"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectMdProductionQuotaFilesVo">
+        select file_id, quota_id, quota_name, file_path, upload_date, version_number, description, orderNum,  is_processed, is_activated, is_delete,file_adv_setting  from md_production_quota_files
+    </sql>
+
+    <!-- 查询列表方法，可添加条件过滤未删除的数据（根据业务需求决定是否添加此条件） -->
+    <select id="selectMdProductionQuotaFilesList" parameterType="MdProductionQuotaFiles" resultMap="MdProductionQuotaFilesResult">
+        <include refid="selectMdProductionQuotaFilesVo"/>
+        <where>
+            <!-- 假设只查询未删除的数据，添加此条件（可按需调整或删除） -->
+            <if test="isDelete == null or isDelete!= 1"> and is_delete = 0</if>
+            <if test="quotaId!= null "> and quota_id = #{quotaId}</if>
+            <if test="quotaName!= null  and quotaName!= ''"> and quota_name like concat('%', #{quotaName}, '%')</if>
+            <if test="filePath!= null  and filePath!= ''"> and file_path = #{filePath}</if>
+            <if test="uploadDate!= null "> and upload_date = #{uploadDate}</if>
+            <if test="versionNumber!= null  and versionNumber!= ''"> and version_number = #{versionNumber}</if>
+            <if test="description!= null  and description!= ''"> and description = #{description}</if>
+            <if test="ordernum!= null "> and orderNum = #{ordernum}</if>
+            <if test="isProcessed != null "> and is_processed = #{isProcessed}</if>
+            <if test="isActivated != null "> and is_activated = #{isActivated}</if>
+            <if test="fileAdvSetting != null  and fileAdvSetting != ''"> and file_adv_setting = #{fileAdvSetting}</if>
+
+        </where>
+    </select>
+
+    <!-- 根据文件ID查询方法，可添加条件过滤未删除的数据（根据业务需求决定是否添加此条件） -->
+    <select id="selectMdProductionQuotaFilesByFileId" parameterType="Long" resultMap="MdProductionQuotaFilesResult">
+        <include refid="selectMdProductionQuotaFilesVo"/>
+        <where>
+            <!-- 假设只查询未删除的数据，添加此条件（可按需调整或删除） -->
+            <if test="isDelete == null or isDelete!= 1"> is_delete = 0</if>
+            and file_id = #{fileId}
+        </where>
+    </select>
+
+    <!-- 插入方法，保持不变 -->
+    <insert id="insertMdProductionQuotaFiles" parameterType="MdProductionQuotaFiles" useGeneratedKeys="true" keyProperty="fileId">
+        insert into md_production_quota_files
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="quotaId!= null">quota_id,</if>
+            <if test="quotaName!= null and quotaName!= ''">quota_name,</if>
+            <if test="filePath!= null and filePath!= ''">file_path,</if>
+            <if test="uploadDate!= null">upload_date,</if>
+            <if test="versionNumber!= null and versionNumber!= ''">version_number,</if>
+            <if test="description!= null">description,</if>
+            <if test="ordernum!= null">orderNum,</if>
+            <!-- 插入时默认设置is_delete为0，表示未删除 -->
+            <if test="isDelete == null">is_delete,</if>
+            <if test="isProcessed != null">is_processed,</if>
+            <if test="isActivated != null">is_activated,</if>
+            <if test="fileAdvSetting != null">file_adv_setting,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="quotaId!= null">#{quotaId},</if>
+            <if test="quotaName!= null and quotaName!= ''">#{quotaName},</if>
+            <if test="filePath!= null and filePath!= ''">#{filePath},</if>
+            <if test="uploadDate!= null">#{uploadDate},</if>
+            <if test="versionNumber!= null and versionNumber!= ''">#{versionNumber},</if>
+            <if test="description!= null">#{description},</if>
+            <if test="ordernum!= null">#{ordernum},</if>
+            <!-- 插入时默认设置is_delete为0，表示未删除 -->
+            <if test="isDelete == null">0,</if>
+            <if test="isProcessed != null">#{isProcessed},</if>
+            <if test="isActivated != null">#{isActivated},</if>
+            <if test="fileAdvSetting != null">#{fileAdvSetting},</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+    </insert>
+
+    <!-- 更新方法，保持不变，可根据业务需求后续考虑是否在更新时也能修改isDelete字段的值 -->
+    <update id="updateMdProductionQuotaFiles" parameterType="MdProductionQuotaFiles">
+        update md_production_quota_files
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="quotaId!= null">quota_id = #{quotaId},</if>
+            <if test="quotaName!= null and quotaName!= ''">quota_name = #{quotaName},</if>
+            <if test="filePath!= null and filePath!= ''">file_path = #{filePath},</if>
+            <if test="uploadDate!= null">upload_date = #{uploadDate},</if>
+            <if test="versionNumber!= null and versionNumber!= ''">version_number = #{versionNumber},</if>
+            <if test="description!= null">description = #{description},</if>
+            <if test="ordernum!= null">orderNum = #{ordernum},</if>
+
+            <if test="isProcessed != null">is_processed = #{isProcessed},</if>
+            <if test="isActivated != null">is_activated = #{isActivated},</if>
+            <if test="fileAdvSetting != null">file_adv_setting = #{fileAdvSetting},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where file_id = #{fileId}
+    </update>
+
+    <!-- 将根据文件ID删除改为更新isDelete字段为1实现软删除 -->
+    <update id="softDeleteMdProductionQuotaFilesByFileId" parameterType="Long">
+        update md_production_quota_files
+        set is_delete = 1
+        where file_id = #{fileId}
+    </update>
+
+    <!-- 将根据多个文件ID批量删除改为更新isDelete字段为1实现软删除 -->
+    <update id="softDeleteMdProductionQuotaFilesByFileIds" parameterType="String">
+        update md_production_quota_files
+        set is_delete = 1
+        where file_id in
+        <foreach item="fileId" collection="array" open="(" separator="," close=")">
+            #{fileId}
+        </foreach>
+    </update>
+
+    <delete id="deleteMdProductionQuotaFilesByFileId" parameterType="Long">
+        delete from md_production_quota_files where file_id = #{fileId}
+    </delete>
+
+    <delete id="deleteMdProductionQuotaFilesByFileIds" parameterType="String">
+        delete from md_production_quota_files where file_id in
+        <foreach item="fileId" collection="array" open="(" separator="," close=")">
+            #{fileId}
+        </foreach>
+    </delete>
+</mapper>
